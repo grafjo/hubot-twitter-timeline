@@ -1,0 +1,31 @@
+{
+  "name": "hubot-twitter-timeline",
+  "version": "0.0.2",
+
+  "author": "Johannes Graf <graf.johannes@gmail.com>",
+
+  "description": "Displays the Twitter timeline of a configured Twitter user in a room.",
+
+  "keywords": [
+    "hubot",
+    "hubot-scripts",
+    "twitter"
+  ],
+
+  "license": [{
+    "type":"MIT",
+    "url":"https://raw.github.com/grafjo/hubot-twitter-timeline/master/LICENSE"
+  }],
+
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/grafjo/hubot-twitter-timeline.git"
+  },
+
+  "dependencies": {
+    "coffee-script": "~1.6",
+    "twit":"~1.1"
+  },
+
+  "main": "index.coffee"
+}
