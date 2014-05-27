@@ -9,7 +9,8 @@
   "keywords": [
     "hubot",
     "hubot-scripts",
-    "twitter"
+    "twitter",
+    "irc"
   ],
 
   "license": [{
@@ -24,7 +25,8 @@
 
   "dependencies": {
     "coffee-script": "~1.6",
-    "twit":"~1.1"
+    "twit":"~1.1",
+    "irc-colors":"~1.1"
   },
 
   "main": "index.coffee"

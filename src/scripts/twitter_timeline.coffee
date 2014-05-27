@@ -6,6 +6,7 @@
 #
 # Configuration:
 #   HUBOT_TWITTER_TIMELINE_ROOM
+#   HUBOT_TWITTER_TIMELINE_ENABLE_COLORS
 #   HUBOT_TWITTER_TIMELINE_CONSUMER_KEY
 #   HUBOT_TWITTER_TIMELINE_CONSUMER_SECRET
 #   HUBOT_TWITTER_TIMELINE_ACCESS_TOKEN
@@ -15,7 +16,7 @@
 #   None
 #
 # Notes:
-#   None
+#   When using the irc adapter, then it's possible to enable tweet colors via HUBOT_TWITTER_TIMELINE_ENABLE_COLORS=true
 #
 # Author:
 #   grafjo
@@ -23,9 +24,13 @@
 
 Twit = require "twit"
 
+useIrcColors = process.env.HUBOT_TWITTER_TIMELINE_USE_IRC_COLORS
+if useIrcColors
+  IrcColors = require "irc-colors"
+
 module.exports = (robot) ->
 
-  unless process.env.HUBOT_TWITTER_TIMELINE_ROOM 
+  unless process.env.HUBOT_TWITTER_TIMELINE_ROOM
     robot.logger.warning "The HUBOT_TWITTER_TIMELINE_ROOM environment variable not set"
     return
   unless process.env.HUBOT_TWITTER_TIMELINE_CONSUMER_KEY
@@ -50,8 +55,21 @@ module.exports = (robot) ->
   stream = twit.stream "user"
 
   stream.on "tweet", (tweet) ->
-    msg = "[@#{tweet.user.screen_name}] "
-    msg += if tweet.retweeted_status then "RT @#{tweet.retweeted_status.user.screen_name}: #{tweet.retweeted_status.text}" else tweet.text
+    if useIrcColors
+      msg = IrcColors.lime "@#{tweet.user.screen_name}"
+    else
+      msg = "@#{tweet.user.screen_name}"
+    msg = "[#{msg}] "
+
+    if tweet.retweeted_status
+      if useIrcColors
+        msg += IrcColors.aqua "RT @#{tweet.retweeted_status.user.screen_name}: "
+      else
+        msg += "RT @#{tweet.retweeted_status.user.screen_name}: "
+      msg += tweet.retweeted_status.text
+    else
+      msg += tweet.text
+
     robot.logger.debug msg
     robot.messageRoom process.env.HUBOT_TWITTER_TIMELINE_ROOM, msg
 
