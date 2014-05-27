@@ -11,6 +11,7 @@ Enables your [hubot](https://github.com/github/hubot) to display the Twitter tim
 Expose the following environment variables:
 
 * HUBOT_TWITTER_TIMELINE_ROOM
+* HUBOT_TWITTER_TIMELINE_ENABLE_COLORS
 * HUBOT_TWITTER_TIMELINE_CONSUMER_KEY
 * HUBOT_TWITTER_TIMELINE_CONSUMER_SECRET
 * HUBOT_TWITTER_TIMELINE_ACCESS_TOKEN
@@ -23,6 +24,8 @@ None
 ## Notes
 
 This script is using the Twitter [User streams](https://dev.twitter.com/docs/streaming-apis/streams/user). 
+
+When using the irc adapter, then it's possible to enable tweet colors via HUBOT_TWITTER_TIMELINE_ENABLE_COLORS=true
 
 ## Author
 
