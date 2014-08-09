@@ -30,6 +30,8 @@ if enabledIrcColors
 
 module.exports = (robot) ->
 
+  robot.logger.info "The HUBOT_TWITTER_TIMELINE_ENABLE_COLORS is set to #{enabledIrcColors}"
+
   unless process.env.HUBOT_TWITTER_TIMELINE_ROOM
     robot.logger.warning "The HUBOT_TWITTER_TIMELINE_ROOM environment variable not set"
     return
