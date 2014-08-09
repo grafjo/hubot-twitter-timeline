@@ -2,7 +2,8 @@
 #   Displays the Twitter timeline of a configured Twitter user in a room.
 #
 # Dependencies:
-#   "twit": "1.1.15"
+#   "twit": "~1.1"
+#   "irc-colors": "~1.1"
 #
 # Configuration:
 #   HUBOT_TWITTER_TIMELINE_ROOM
