@@ -24,8 +24,8 @@
 
 Twit = require "twit"
 
-if useIrcColors
 enabledIrcColors = process.env.HUBOT_TWITTER_TIMELINE_ENABLE_COLORS
+if enabledIrcColors
   IrcColors = require "irc-colors"
 
 module.exports = (robot) ->
@@ -55,14 +55,14 @@ module.exports = (robot) ->
   stream = twit.stream "user"
 
   stream.on "tweet", (tweet) ->
-    if useIrcColors
+    if enabledIrcColors
       msg = IrcColors.lime "@#{tweet.user.screen_name}"
     else
       msg = "@#{tweet.user.screen_name}"
     msg = "[#{msg}] "
 
     if tweet.retweeted_status
-      if useIrcColors
+      if enabledIrcColors
         msg += IrcColors.aqua "RT @#{tweet.retweeted_status.user.screen_name}: "
       else
         msg += "RT @#{tweet.retweeted_status.user.screen_name}: "
