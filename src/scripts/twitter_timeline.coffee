@@ -24,8 +24,8 @@
 
 Twit = require "twit"
 
-useIrcColors = process.env.HUBOT_TWITTER_TIMELINE_USE_IRC_COLORS
 if useIrcColors
+enabledIrcColors = process.env.HUBOT_TWITTER_TIMELINE_ENABLE_COLORS
   IrcColors = require "irc-colors"
 
 module.exports = (robot) ->
