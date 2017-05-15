@@ -96,15 +96,13 @@ module.exports = (robot) ->
       urls = tweet.entities.urls
       if Array.isArray(urls)
         for url in urls
-          robot.logger.warning "url: "+ util.inspect(url, {showHidden: false, depth: null}))
-          opts = {
-            uri: url,
-            encoding: null,
-            header: {},
-            jar: true
-          }
-          robot.logger.warning "ops obj: #{opts}"
-
+          robot.logger.warning "got url #{url.url} --> #{url.expanded_url}"
+          urlnum++
+          if url.expanded_url
+             robot.messageRoom process.env.HUBOT_TWITTER_TIMELINE_ROOM, [ urlnum, pre, space, url.expanded_url, space, end ].join("")
+          else
+            robot.messageRoom process.env.HUBOT_TWITTER_TIMELINE_ROOM, [ urlnum, pre, space, url.url, space, end ].join("")
+      
     robot.logger.debug msg
     robot.messageRoom process.env.HUBOT_TWITTER_TIMELINE_ROOM, msg
 
