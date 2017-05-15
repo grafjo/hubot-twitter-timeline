@@ -24,7 +24,7 @@
 Twit = require "twit"
 request = require "request"
 IrcColors = require "irc-colors"
-
+util = require('util')
 
 module.exports = (robot) ->
   epandUrl = process.env.HUBOT_TWITTER_TIMELINE_EXPAND_URL
@@ -96,7 +96,7 @@ module.exports = (robot) ->
       urls = tweet.entities.urls
       if Array.isArray(urls)
         for url in urls
-          robot.logger.warning "url: #{url}"
+          robot.logger.warning "url: "+ util.inspect(url, {showHidden: false, depth: null}))
           opts = {
             uri: url,
             encoding: null,
