@@ -2,7 +2,8 @@
 #   Displays the Twitter timeline of a configured Twitter user in a room.
 #
 # Dependencies:
-#   "twit": "1.1.15"
+#   "twit": "2.2.5"
+#   "irc-colors": "1.1"
 #
 # Configuration:
 #   HUBOT_TWITTER_TIMELINE_ROOM
@@ -11,12 +12,13 @@
 #   HUBOT_TWITTER_TIMELINE_CONSUMER_SECRET
 #   HUBOT_TWITTER_TIMELINE_ACCESS_TOKEN
 #   HUBOT_TWITTER_TIMELINE_ACCESS_TOKEN_SECRET
+# Optionally you can add some color, if used within the IRC adapter by setting
+#   HUBOT_TWITTER_TIMELINE_ENABLE_COLORS=true
+# Resources within the tweets (urls and media links) can be instantly expanded by setting
+#    HUBOT_TWITTER_TIMELINE_EXPAND_URL=true
 #
 # Commands:
 #   None
-#
-# Notes:
-#   When using the irc adapter, then it's possible to enable tweet colors via HUBOT_TWITTER_TIMELINE_ENABLE_COLORS=true
 #
 # Author:
 #   grafjo
