@@ -22,9 +22,7 @@
 #   grafjo
 
 Twit = require "twit"
-request = require "request"
 IrcColors = require "irc-colors"
-util = require('util')
 
 module.exports = (robot) ->
   epandUrl = process.env.HUBOT_TWITTER_TIMELINE_EXPAND_URL
@@ -68,6 +66,9 @@ module.exports = (robot) ->
       msg += tweet.retweeted_status.text
     else
       msg += tweet.text
+    # first things first, the message
+    robot.logger.debug msg
+    robot.messageRoom process.env.HUBOT_TWITTER_TIMELINE_ROOM, msg
 
     # Expand links if any
     if process.env.HUBOT_TWITTER_TIMELINE_EXPAND_URL
@@ -89,22 +90,19 @@ module.exports = (robot) ->
       if Array.isArray(media)
         for thing in media
           imgnum++
-          robot.logger.debug "----- IMG # " + imgnum + "------"
+          robot.logger.debug "----- IMG #{imgnum} ------"
           robot.logger.debug thing
           msg += [ nl, imgnum, preimg, space, thing.media_url, space, end ].join("")
 
       urls = tweet.entities.urls
       if Array.isArray(urls)
         for url in urls
-          robot.logger.warning "got url #{url.url} --> #{url.expanded_url}"
+          robot.logger.debug "got url #{url.url} --> #{url.expanded_url}"
           urlnum++
           if url.expanded_url
              robot.messageRoom process.env.HUBOT_TWITTER_TIMELINE_ROOM, [ urlnum, pre, space, url.expanded_url, space, end ].join("")
           else
             robot.messageRoom process.env.HUBOT_TWITTER_TIMELINE_ROOM, [ urlnum, pre, space, url.url, space, end ].join("")
-      
-    robot.logger.debug msg
-    robot.messageRoom process.env.HUBOT_TWITTER_TIMELINE_ROOM, msg
 
   stream.on "disconnect", (disconnectMessage) ->
     robot.logger.warning "I've got disconnected from Twitter timeline. Apparently the reason is: #{disconnectMessage}"
