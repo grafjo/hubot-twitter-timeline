@@ -21,6 +21,9 @@
 # Author:
 #   grafjo
 
+expandUrls = process.env.HUBOT_TWITTER_TIMELINE_EXPAND_URL
+if expandUrls
+  request = require "request"
 
 Twit = require "twit"
 
@@ -71,8 +74,7 @@ module.exports = (robot) ->
       msg += tweet.text
 
     # Expand links if any
-    urlExpander = process.env.HUBOT_TWITTER_TIMELINE_EXPAND_URL
-    if urlExpander
+    if expandUrls
       nl= "\n"
       space=" "
       if useIrcColors
@@ -97,25 +99,14 @@ module.exports = (robot) ->
 
       urls = tweet.entities.urls
       if Array.isArray(urls)
-        for thing in urls
-          lurl = "http://api.longurl.org/v2/expand?url=" + encodeURIComponent(thing.url) + "&title=1" + "&format=json"
-          robot.http(lurl)
-            .header('Accept', 'application/json')
-            .get() (err, res, body) ->
-              if err
-                robot.logger.warning "Encountered an error :( #{err}"
-              else if res.statusCode > 300
-                robot.logger.warning "something smells funny: #{res}"
-              else
-                urlnum++
-                robot.logger.debug "----- URL # " + urlnum + "------"
-                robot.logger.debug thing
-                urlinfo = JSON.parse body
-                robot.logger.debug urlinfo
-                if urlinfo.title
-                  robot.messageRoom process.env.HUBOT_TWITTER_TIMELINE_ROOM, [ urlnum, pre, space, urlinfo['long-url'], space, sep, space, urlinfo['title'], space, end ].join("")
-                else
-                  robot.messageRoom process.env.HUBOT_TWITTER_TIMELINE_ROOM, [ urlnum, pre, space, urlinfo['long-url'], space, end ].join("")
+        for url in urls
+          r = request.get(url) (res, err, body) ->
+            if err
+              robot.logger.warning "Received error during url expansion: #{err}"
+            else:
+              urlnum++
+              robot.logger.debug "----- URL # " + urlnum + "------" + res.request.uri.href
+              robot.messageRoom process.env.HUBOT_TWITTER_TIMELINE_ROOM, [ urlnum, pre, space, res.request.uri.href , end ].join("")
 
     robot.logger.debug msg
     robot.messageRoom process.env.HUBOT_TWITTER_TIMELINE_ROOM, msg
