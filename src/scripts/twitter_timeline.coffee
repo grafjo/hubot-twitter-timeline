@@ -44,6 +44,8 @@ module.exports = (robot) ->
   unless process.env.HUBOT_TWITTER_TIMELINE_ACCESS_TOKEN_SECRET
     robot.logger.warning "The HUBOT_TWITTER_TIMELINE_ACCESS_TOKEN_SECRET environment variable not set"
     return
+  
+  expandUrls = process.env.HUBOT_TWITTER_TIMELINE_EXPAND_URL
 
   twit = new Twit
     consumer_key: process.env.HUBOT_TWITTER_TIMELINE_CONSUMER_KEY,
@@ -51,7 +53,6 @@ module.exports = (robot) ->
     access_token: process.env.HUBOT_TWITTER_TIMELINE_ACCESS_TOKEN,
     access_token_secret: process.env.HUBOT_TWITTER_TIMELINE_ACCESS_TOKEN_SECRET
 
-  expandUrls = process.env.HUBOT_TWITTER_TIMELINE_EXPAND_URL
   stream = twit.stream "user"
 
   stream.on "tweet", (tweet) ->
