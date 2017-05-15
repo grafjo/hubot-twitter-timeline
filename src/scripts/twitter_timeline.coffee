@@ -111,7 +111,7 @@ module.exports = (robot) ->
                 robot.logger.debug "----- URL # " + urlnum + "------" + res.getHeader('Location')
                 robot.messageRoom process.env.HUBOT_TWITTER_TIMELINE_ROOM, [ urlnum, pre, space, res.getHeader('Location'), end ].join("")
               else
-                robot.logger.debug "----- URL ##{urlnum}------#{res}"
+                robot.logger.warning "----- URL ##{urlnum}------#{res}"
 
     robot.logger.debug msg
     robot.messageRoom process.env.HUBOT_TWITTER_TIMELINE_ROOM, msg
