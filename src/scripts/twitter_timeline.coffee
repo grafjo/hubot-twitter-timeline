@@ -45,8 +45,6 @@ module.exports = (robot) ->
     robot.logger.warning "The HUBOT_TWITTER_TIMELINE_ACCESS_TOKEN_SECRET environment variable not set"
     return
   
-  expandUrls = process.env.HUBOT_TWITTER_TIMELINE_EXPAND_URL
-
   twit = new Twit
     consumer_key: process.env.HUBOT_TWITTER_TIMELINE_CONSUMER_KEY,
     consumer_secret: process.env.HUBOT_TWITTER_TIMELINE_CONSUMER_SECRET,
@@ -72,7 +70,7 @@ module.exports = (robot) ->
       msg += tweet.text
 
     # Expand links if any
-    if expandUrls
+    if process.env.HUBOT_TWITTER_TIMELINE_EXPAND_URL
       nl= "\n"
       space=" "
       if useIrcColors
@@ -104,8 +102,11 @@ module.exports = (robot) ->
                 robot.logger.warning "Received error during url expansion: #{err}"
               else
                 urlnum++
-                robot.logger.debug "----- URL # " + urlnum + "------" + res.request.uri.href
-                robot.messageRoom process.env.HUBOT_TWITTER_TIMELINE_ROOM, [ urlnum, pre, space, res.request.uri.href , end ].join("")
+                if res.statusCode = 302
+                  robot.logger.debug "----- URL # " + urlnum + "------" + res.getHeader('Location')
+                  robot.messageRoom process.env.HUBOT_TWITTER_TIMELINE_ROOM, [ urlnum, pre, space, res.getHeader('Location'), end ].join("")
+                else
+                  robot.logger.debug "----- URL ##{urlnum}------#{body}"
 
     robot.logger.debug msg
     robot.messageRoom process.env.HUBOT_TWITTER_TIMELINE_ROOM, msg
