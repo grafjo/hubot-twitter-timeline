@@ -4,7 +4,7 @@ Enables your [hubot](https://github.com/github/hubot) to display the Twitter tim
 
 ## Dependencies
 
-[twit](https://github.com/ttezel/twit) 1.1.15
+[twit](https://github.com/ttezel/twit) 2.2.5
 
 ## Configuration
 
@@ -17,6 +17,12 @@ Expose the following environment variables:
 * HUBOT_TWITTER_TIMELINE_ACCESS_TOKEN
 * HUBOT_TWITTER_TIMELINE_ACCESS_TOKEN_SECRET
 
+Optionally you can add some color, if used within the IRC adapter by setting
+* HUBOT_TWITTER_TIMELINE_ENABLE_COLORS=true
+
+Resources within the tweets (urls and media links) can be instantly expanded by setting
+* HUBOT_TWITTER_TIMELINE_EXPAND_URL=true
+
 ## Commands
 
 None
@@ -24,8 +30,6 @@ None
 ## Notes
 
 This script is using the Twitter [User streams](https://dev.twitter.com/docs/streaming-apis/streams/user). 
-
-When using the irc adapter, then it's possible to enable tweet colors via HUBOT_TWITTER_TIMELINE_ENABLE_COLORS=true
 
 ## Author
 
