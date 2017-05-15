@@ -21,10 +21,6 @@
 # Author:
 #   grafjo
 
-expandUrls = process.env.HUBOT_TWITTER_TIMELINE_EXPAND_URL
-if expandUrls
-  request = require "request"
-
 Twit = require "twit"
 
 useIrcColors = process.env.HUBOT_TWITTER_TIMELINE_USE_IRC_COLORS
@@ -55,6 +51,7 @@ module.exports = (robot) ->
     access_token: process.env.HUBOT_TWITTER_TIMELINE_ACCESS_TOKEN,
     access_token_secret: process.env.HUBOT_TWITTER_TIMELINE_ACCESS_TOKEN_SECRET
 
+  expandUrls = process.env.HUBOT_TWITTER_TIMELINE_EXPAND_URL
   stream = twit.stream "user"
 
   stream.on "tweet", (tweet) ->
@@ -100,13 +97,14 @@ module.exports = (robot) ->
       urls = tweet.entities.urls
       if Array.isArray(urls)
         for url in urls
-          r = request.get(url) (res, err, body) ->
-            if err
-              robot.logger.warning "Received error during url expansion: #{err}"
-            else:
-              urlnum++
-              robot.logger.debug "----- URL # " + urlnum + "------" + res.request.uri.href
-              robot.messageRoom process.env.HUBOT_TWITTER_TIMELINE_ROOM, [ urlnum, pre, space, res.request.uri.href , end ].join("")
+          robot.http(url)
+            .get() (err, res, body) ->
+              if err
+                robot.logger.warning "Received error during url expansion: #{err}"
+              else
+                urlnum++
+                robot.logger.debug "----- URL # " + urlnum + "------" + res.request.uri.href
+                robot.messageRoom process.env.HUBOT_TWITTER_TIMELINE_ROOM, [ urlnum, pre, space, res.request.uri.href , end ].join("")
 
     robot.logger.debug msg
     robot.messageRoom process.env.HUBOT_TWITTER_TIMELINE_ROOM, msg
