@@ -22,13 +22,13 @@
 #   grafjo
 
 Twit = require "twit"
+request = require "request"
+IrcColors = require "irc-colors"
 
-useIrcColors = process.env.HUBOT_TWITTER_TIMELINE_USE_IRC_COLORS
-if useIrcColors
-  IrcColors = require "irc-colors"
 
 module.exports = (robot) ->
-
+  epandUrl = process.env.HUBOT_TWITTER_TIMELINE_EXPAND_URL
+  useIrcColors = process.env.HUBOT_TWITTER_TIMELINE_USE_IRC_COLORS
   unless process.env.HUBOT_TWITTER_TIMELINE_ROOM
     robot.logger.warning "The HUBOT_TWITTER_TIMELINE_ROOM environment variable not set"
     return
@@ -96,17 +96,22 @@ module.exports = (robot) ->
       urls = tweet.entities.urls
       if Array.isArray(urls)
         for url in urls
-          robot.http(url)
-            .get() (err, res, body) ->
-              if err
-                robot.logger.warning "Received error during url expansion: #{err}"
+          opts = {
+            uri: url,
+            encoding: null,
+            header: {},
+            jar: true
+          }
+          request opts (err, res, body) ->
+            if err
+              robot.logger.warning "Received error during url expansion: #{err}"
+            else
+              urlnum++
+              if res.statusCode = 302
+                robot.logger.debug "----- URL # " + urlnum + "------" + res.getHeader('Location')
+                robot.messageRoom process.env.HUBOT_TWITTER_TIMELINE_ROOM, [ urlnum, pre, space, res.getHeader('Location'), end ].join("")
               else
-                urlnum++
-                if res.statusCode = 302
-                  robot.logger.debug "----- URL # " + urlnum + "------" + res.getHeader('Location')
-                  robot.messageRoom process.env.HUBOT_TWITTER_TIMELINE_ROOM, [ urlnum, pre, space, res.getHeader('Location'), end ].join("")
-                else
-                  robot.logger.debug "----- URL ##{urlnum}------#{body}"
+                robot.logger.debug "----- URL ##{urlnum}------#{res}"
 
     robot.logger.debug msg
     robot.messageRoom process.env.HUBOT_TWITTER_TIMELINE_ROOM, msg

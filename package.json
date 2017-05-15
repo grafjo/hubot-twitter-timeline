@@ -1,6 +1,6 @@
 {
   "name": "hubot-twitter-timeline",
-  "version": "0.1.1",
+  "version": "0.1.2",
 
   "author": "Johannes Graf <graf.johannes@gmail.com>",
 
@@ -24,9 +24,10 @@
   },
 
   "dependencies": {
-    "coffee-script": ">1.6",
-    "twit":">1.1",
-    "irc-colors":">1.1"
+    "coffee-script": "~1.11.1",
+    "twit":"~2.2.5",
+    "irc-colors":"~1.1",
+    "request": "~2.76.0"
   },
 
   "main": "index.coffee"
