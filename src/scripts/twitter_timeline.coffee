@@ -102,7 +102,7 @@ module.exports = (robot) ->
             header: {},
             jar: true
           }
-          request opts (err, res, body) ->
+          request opts, (err, res, body) ->
             if err
               robot.logger.warning "Received error during url expansion: #{err}"
             else
